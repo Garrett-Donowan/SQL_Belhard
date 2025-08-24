@@ -1,0 +1,125 @@
+Homework
+
+Exercise_1
+_________________________
+
+Задание: 6
+Для каждого производителя, выпускающего ПК-блокноты c объёмом жесткого диска не менее 10 Гбайт, найти скорости таких ПК-блокнотов. Вывод: производитель, скорость.
+
+Решение:
+SELECT DISTINCT Product.maker, Laptop.speed
+FROM Product, Laptop 
+WHERE Laptop.model = Product.model AND Laptop.hd >= 10 AND Product.TYPE = 'laptop'
+_________________________
+
+Задание: 7
+Найдите номера моделей и цены всех имеющихся в продаже продуктов (любого типа) производителя B (латинская буква).
+
+Решение:
+
+SELECT product.model,price
+FROM pc JOIN 
+product ON product.model=pc.model
+WHERE product.maker='B'
+
+UNION
+SELECT laptop.model, laptop.price 
+FROM Laptop JOIN 
+product ON product.model=laptop.model
+WHERE product.maker='B'
+
+UNION
+SELECT printer.model, printer.price 
+FROM printer JOIN 
+product ON product.model=printer.model
+WHERE product.maker='B'
+_________________________
+
+Задание: 8 
+Найдите производителя, выпускающего ПК, но не ПК-блокноты.
+
+Решение:
+SELECT maker
+from Product
+WHERE type = 'PC'
+EXCEPT 
+SELECT maker 
+FROM Product 
+WHERE type = 'Laptop'
+_________________________
+
+Задание: 9
+Найдите производителей ПК с процессором не менее 450 Мгц. Вывести: Maker
+
+Решение:
+SELECT DISTINCT maker
+FROM PC
+INNER JOIN product ON PC.model = Product.model
+WHERE PC.speed >= '450'
+_________________________
+
+Задание: 10
+Найдите модели принтеров, имеющих самую высокую цену. Вывести: model, price
+
+Решение:
+SELECT DISTINCT model, price
+FROM Printer
+WHERE price = (SELECT MAX(price)
+               FROM Printer)
+_________________________
+
+Задание: 11
+Найдите среднюю скорость ПК.
+
+Решение:
+SELECT AVG(speed)
+FROM PC
+_________________________
+
+Задание: 12
+Найдите среднюю скорость ПК-блокнотов, цена которых превышает 1000 дол.
+
+Решение:
+SELECT AVG(speed)
+FROM Laptop
+WHERE price > '1000'
+_________________________
+
+Задание: 13 
+Найдите среднюю скорость ПК, выпущенных производителем A.
+
+Решение:
+SELECT AVG(PC.speed)
+FROM PC, Product
+WHERE Product.maker = 'A' and Product.model = PC.model
+_________________________
+
+Задание: 14 
+Найдите класс, имя и страну для кораблей из таблицы Ships, имеющих не менее 10 орудий.
+
+Решение:
+SELECT DISTINCT Classes.class, Ships.name, Classes.country
+FROM Ships JOIN Classes ON (classes.class = ships.class)
+WHERE numGuns >= 10
+_________________________
+
+Задание: 15
+Найдите размеры жестких дисков, совпадающих у двух и более PC. Вывести: HD
+
+Решение:
+SELECT DISTINCT hd
+FROM PC
+GROUP BY hd 
+HAVING COUNT (model) >= 2
+_________________________
+
+Задание: 16 
+Найдите пары моделей PC, имеющих одинаковые скорость и RAM. В результате каждая пара указывается только один раз, т.е. (i,j), но не (j,i), Порядок вывода: модель с большим номером, модель с меньшим номером, скорость и RAM.
+
+Решение:
+SELECT distinct PC.model, PC1.model, PC.speed, PC.RAM 
+FROM PC 
+INNER JOIN  PC as PC1 ON (
+       PC.model > PC1.model 
+       AND PC.ram = PC1.ram 
+       AND PC.speed = PC1.speed)
